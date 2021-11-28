@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styles from './Layer.module.scss';
+import styles from './index.module.scss';
 
 const Layer = function ({ visible, children }) {
   return (
