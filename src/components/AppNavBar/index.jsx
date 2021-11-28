@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from './AppNavBar.module.scss';
+import styles from './index.module.scss';
 
 const AddItemButton = function () {
   const [, setMode] = useState(0);
