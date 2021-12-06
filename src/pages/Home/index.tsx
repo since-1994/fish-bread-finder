@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
-import AppNavBar from '../../components/AppNavBar';
-import AppHeader from '../../components/AppHeader';
-import KakaoMap from '../../components/KakaoMap';
+import React, { useState } from "react";
+import AppNavBar from "../../components/AppNavBar";
+import AppHeader from "../../components/AppHeader";
+import KakaoMap from "../../components/KakaoMap";
+import Layer from "../../components/Layer";
+import ListPlace from "../../components/ListPlace";
+
 const Home: React.FC = function () {
   const [mode, setMode] = useState<Number>(0);
 
@@ -11,9 +14,12 @@ const Home: React.FC = function () {
 
   return (
     <>
-        <AppHeader />
-        <KakaoMap mode={mode} />
-        <AppNavBar onChangeMode={changeMode} mode={mode} />      
+      <AppHeader />
+      <KakaoMap mode={mode} />
+      <AppNavBar onChangeMode={changeMode} mode={mode} />
+      <Layer visible>
+        <ListPlace />
+      </Layer>
     </>
   );
 };

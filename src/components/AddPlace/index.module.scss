@@ -1,0 +1,180 @@
+.add-place {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+
+  &__title {
+    margin: 0;
+    padding-bottom: 20px;
+  }
+
+  &__description {
+    margin: 0;
+    padding-bottom: 10px;
+  }
+
+  &__input-group {
+    & + & {
+      margin-top: 20px;
+    }
+  }
+
+  &__select {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    padding-bottom: 10px;
+    white-space: nowrap;
+    overflow-x: auto;
+
+    &::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #adb5bd;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+      background: #adb5bd;
+    }
+
+    &-item {
+      display: inline-block;
+      border-radius: 10px;
+      width: 90px;
+      height: 40px;
+      line-height: 40px;
+      background-color: #f9f7f7;
+      color: #605858;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    &-item + &-item {
+      margin-left: 20px;
+    }
+
+    &--active {
+      background-color: #241515;
+      color: #fff;
+    }
+  }
+
+  &__menu {
+    padding: 0;
+    padding-bottom: 20px;
+    list-style: none;
+
+    &-close {
+      font-size: 13px;
+      position: absolute;
+      right: -8px;
+      top: -10px;
+      width: 20px;
+      height: 20px;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      border: 1px solid #333;
+      cursor: pointer;
+    }
+
+    li {
+      position: relative;
+    }
+
+    li + li {
+      margin-top: 10px;
+    }
+  }
+
+  &__input {
+    background-color: #f9f7f7;
+    border: none;
+    border-radius: 10px;
+    width: 100%;
+    height: 40px;
+    text-indent: 10px;
+    outline: none;
+    padding: 0;
+
+    &--menu-name {
+      width: calc(30% - 5px);
+      margin-right: 10px;
+    }
+
+    &--menu-price {
+      width: calc(70% - 5px);
+    }
+  }
+
+  &__create-btn {
+    margin: 0;
+    padding: 0;
+    width: 40px;
+    height: 40px;
+    background-color: #ff8a3d;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+
+  &__submit {
+    margin-top: 10px;
+    background-color: #ff8a3d;
+    color: #fff;
+    width: 100%;
+    min-height: 40px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    position: sticky;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: auto;
+    bottom: 0;
+  }
+
+  &__preview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 250px;
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+
+    label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      font-size: 50px;
+      font-weight: 100;
+      cursor: pointer;
+    }
+  }
+
+  &__thumbnail {
+    width: 100%;
+    height: 250px;
+  }
+
+  input[type="file"] {
+    position: absolute;
+    width: 0;
+    height: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+  }
+}

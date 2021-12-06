@@ -1,16 +1,16 @@
-import React from 'react';
-import styles from './index.module.scss';
+import React from "react";
+import styles from "./index.module.scss";
 
-interface LayerProps{
+interface LayerProps {
   visible: Boolean;
-  children: any
+  children: any;
 }
 
 const Layer: React.FC<LayerProps> = function ({ visible, children }) {
   return (
     visible && (
-      <div className={styles.Layer}>
-        <section className={styles.Inner}>{children}</section>
+      <div className={styles["layer"]}>
+        <section className={styles["layer__inner"]}>{children}</section>
       </div>
     )
   );
