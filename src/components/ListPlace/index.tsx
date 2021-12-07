@@ -5,6 +5,16 @@ import Loading from "../Loading";
 
 import { getDatabase, ref, child, get } from "firebase/database";
 
+const DAYS_LABEL: any = {
+  MONDAY: "월",
+  TUESDAY: "화",
+  WEDNESDAY: "수",
+  THURSDAY: "목",
+  FRIDAY: "금",
+  SATURDAY: "토",
+  SUNDAY: "일",
+};
+
 const ListPlace = function () {
   const [list, setList] = useState<any>([]);
   const [loading, setLoading] = useState<any>(false);
@@ -19,6 +29,14 @@ const ListPlace = function () {
       .then((snapshot) => {
         if (snapshot.exists()) {
           setList(
+            Object.entries(snapshot.val()).map((item) => {
+              return {
+                uniqueId: item[0],
+                ...Object.assign({}, item[1]),
+              };
+            })
+          );
+          console.log(
             Object.entries(snapshot.val()).map((item) => {
               return {
                 uniqueId: item[0],
@@ -55,7 +73,14 @@ const ListPlace = function () {
               onClick={() => navigate(`/place/${item.uniqueId}`)}
             >
               <div className={styles["list-place__item-left"]}>
-                {item.placeName}
+                <p>{item.placeName}</p>
+                <ul className={styles["list-place__days"]}>
+                  {item.days.map((day: any) => (
+                    <li className={styles["list-place__days-item"]}>
+                      {DAYS_LABEL[day]}
+                    </li>
+                  ))}
+                </ul>
               </div>
               <div className={styles["list-place__item-right"]}>
                 <img

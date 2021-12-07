@@ -12,13 +12,17 @@
   &__item {
     display: flex;
     cursor: pointer;
-
-    & + & {
-      margin-top: 20px;
-    }
+    padding: 20px 0;
+    border-bottom: 1px solid #ddd;
 
     &-left {
       width: calc(100% - 100px);
+      display: flex;
+      flex-direction: column;
+
+      p {
+        margin: 0;
+      }
     }
 
     &-right {
@@ -26,6 +30,28 @@
         width: 100px;
         height: 70px;
         vertical-align: top;
+      }
+    }
+  }
+
+  &__days {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    margin-top: auto;
+
+    &-item {
+      width: 20px;
+      height: 20px;
+      line-height: 20px;
+      border: 1px solid #ff8a3d;
+      background-color: #ff8a3d;
+      border-radius: 50%;
+      text-align: center;
+      font-size: 10px;
+
+      & + & {
+        margin-left: 5px;
       }
     }
   }
