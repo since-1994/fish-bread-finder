@@ -5,16 +5,6 @@ import Loading from "../Loading";
 
 import { getDatabase, ref, child, get } from "firebase/database";
 
-const DAYS_LABEL: any = {
-  MONDAY: "월",
-  TUESDAY: "화",
-  WEDNESDAY: "수",
-  THURSDAY: "목",
-  FRIDAY: "금",
-  SATURDAY: "토",
-  SUNDAY: "일",
-};
-
 const ListPlace = function () {
   const [list, setList] = useState<any>([]);
   const [loading, setLoading] = useState<any>(false);
@@ -74,10 +64,13 @@ const ListPlace = function () {
             >
               <div className={styles["list-place__item-left"]}>
                 <p>{item.placeName}</p>
-                <ul className={styles["list-place__days"]}>
-                  {item.days.map((day: any) => (
-                    <li className={styles["list-place__days-item"]}>
-                      {DAYS_LABEL[day]}
+                <ul className={styles["list-place__menuTypes"]}>
+                  {item.menuTypes.map((menu: any) => (
+                    <li
+                      className={styles["list-place__menuTypes-item"]}
+                      key={menu.menu_name}
+                    >
+                      {menu.menu_name}
                     </li>
                   ))}
                 </ul>

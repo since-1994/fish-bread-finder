@@ -34,19 +34,18 @@
     }
   }
 
-  &__days {
+  &__menuTypes {
     list-style: none;
     padding: 0;
     display: flex;
     margin-top: auto;
 
     &-item {
-      width: 20px;
-      height: 20px;
-      line-height: 20px;
+      box-sizing: border-box;
+      padding: 5px 10px;
+      border-radius: 3px;
       border: 1px solid #ff8a3d;
       background-color: #ff8a3d;
-      border-radius: 50%;
       text-align: center;
       font-size: 10px;
 
