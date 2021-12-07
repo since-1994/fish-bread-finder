@@ -181,6 +181,7 @@
       margin-top: 10px;
       display: flex;
       justify-content: space-between;
+      align-items: center;
     }
 
     input[type="text"] {
@@ -203,6 +204,22 @@
 
       & + & {
         margin-left: 10px;
+      }
+    }
+  }
+
+  &__review-lists {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    margin-top: 10px;
+
+    li {
+      padding: 20px;
+      border: 1px solid #ccc;
+
+      & + li {
+        margin-top: 10px;
       }
     }
   }

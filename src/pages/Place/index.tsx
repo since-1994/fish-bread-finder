@@ -25,11 +25,11 @@ const Place: React.FC = function () {
   const [grade, setGrade] = useState(1);
   const [review, setReview] = useState("");
   const [reviewLoading, setReviewLoading] = useState(false);
-  const [reviewList, setReviewList] = useState();
+  const [reviewList, setReviewList] = useState<any>([]);
 
   useEffect(() => {
     if (inputRef.current) {
-      inputRef.current.focus();
+      // inputRef.current.focus();
     }
   });
 
@@ -39,7 +39,16 @@ const Place: React.FC = function () {
     get(child(dbRef, `reviews/`))
       .then((snapshot) => {
         if (snapshot.exists()) {
-          console.log(snapshot.val());
+          setReviewList(
+            Object.entries(snapshot.val())
+              .map((item) => {
+                return {
+                  uniqueId: item[0],
+                  ...Object.assign({}, item[1]),
+                };
+              })
+              .filter((review) => review.uniqueId === params.uniqueId)
+          );
         } else {
         }
       })
@@ -258,6 +267,14 @@ const Place: React.FC = function () {
                 </>
               )}
             </form>
+
+            <ul className={styles["place__review-lists"]}>
+              {reviewList.map((review: any) => (
+                <li>
+                  <Grade num={2} onClick={() => {}} fontSize="16px" />
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       )}
