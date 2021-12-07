@@ -15,19 +15,19 @@ const Grade: React.FC<GradeProps> = function ({ num, fontSize, onClick }) {
         fontSize,
       }}
     >
-      <span className={styles["grade__item"]} onClick={() => onClick(1)}>
+      <span className={styles["grade__item"]} onMouseEnter={() => onClick(1)}>
         {num >= 1 ? "★" : "☆"}
       </span>
-      <span className={styles["grade__item"]} onClick={() => onClick(2)}>
+      <span className={styles["grade__item"]} onMouseEnter={() => onClick(2)}>
         {num >= 2 ? "★" : "☆"}
       </span>
-      <span className={styles["grade__item"]} onClick={() => onClick(3)}>
+      <span className={styles["grade__item"]} onMouseEnter={() => onClick(3)}>
         {num >= 3 ? "★" : "☆"}
       </span>
-      <span className={styles["grade__item"]} onClick={() => onClick(4)}>
+      <span className={styles["grade__item"]} onMouseEnter={() => onClick(4)}>
         {num >= 4 ? "★" : "☆"}
       </span>
-      <span className={styles["grade__item"]} onClick={() => onClick(5)}>
+      <span className={styles["grade__item"]} onMouseEnter={() => onClick(5)}>
         {num >= 5 ? "★" : "☆"}
       </span>
     </div>
