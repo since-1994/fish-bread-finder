@@ -1,0 +1,10 @@
+.grade {
+  &__item {
+    cursor: pointer;
+    color: #ff8a3d;
+
+    & + & {
+      margin-left: 10px;
+    }
+  }
+}
