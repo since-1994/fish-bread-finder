@@ -1,0 +1,29 @@
+.loading {
+  position: relative;
+  width: 100%;
+  height: 100%;
+
+  &__spinner {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    border: 10px solid #fff;
+    border-top: 10px solid #ff8a3d;
+    border-radius: 50em;
+    animation-name: spinCircle;
+    animation-duration: 0.8s;
+    animation-iteration-count: infinite;
+  }
+
+  @keyframes spinCircle {
+    from {
+      transform: translate(-50%, -50%) rotate(0);
+    }
+    to {
+      transform: translate(-50%, -50%) rotate(360deg);
+    }
+  }
+}
