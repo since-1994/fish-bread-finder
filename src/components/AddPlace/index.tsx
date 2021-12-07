@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Loading from "../Loading";
 import { ref, push } from "firebase/database";
 import {
   getStorage,
@@ -6,6 +7,7 @@ import {
   uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
+import { useNavigate } from "react-router-dom";
 import firebaseApp from "../../firebase/index";
 
 import styles from "./index.module.scss";
@@ -26,6 +28,9 @@ const AddPlace: React.FC<KakaoMapPosition> = function ({ position }) {
   const [menuTypes, setMenuTypes] = useState<any>([]);
   const [menuTypesId, setMenuTypesId] = useState<any>(0);
   const [thumbnailUrl, setThumbnailUrl] = useState<any>("");
+  const [thumbnailLoading, setThumbnailLoading] = useState<any>(false);
+
+  const navigate = useNavigate();
 
   const onChangePlaceNmae = (e: any) => {
     setPlaceName(e.target.value);
@@ -95,6 +100,7 @@ const AddPlace: React.FC<KakaoMapPosition> = function ({ position }) {
         price_desc: "",
       },
     ]);
+
     setMenuTypesId(menuTypesId + 1);
   };
 
@@ -112,7 +118,7 @@ const AddPlace: React.FC<KakaoMapPosition> = function ({ position }) {
     setMenuTypes(newMenuTypes);
   };
 
-  const onSubmit = (e: any) => {
+  const onSubmit = async (e: any) => {
     e.preventDefault();
 
     if (!placeName.length) {
@@ -142,7 +148,7 @@ const AddPlace: React.FC<KakaoMapPosition> = function ({ position }) {
       }
     }
 
-    push(ref(firebaseApp.db, "places/"), {
+    await push(ref(firebaseApp.db, "places/"), {
       placeName,
       payments,
       days,
@@ -150,26 +156,36 @@ const AddPlace: React.FC<KakaoMapPosition> = function ({ position }) {
       position,
       thumbnailUrl,
     });
+
+    navigate("/");
   };
 
   // @TODO 순서가 지금 조금 잘못됨. 이미지 받아서 미리보기만 보여주고 [추가하기]를 한 경우에만 실제 업로드 해야함
   const onUpload = async (e: any) => {
-    const file = e.target.files[0];
+    try {
+      const file = e.target.files[0];
 
-    const storage = getStorage();
-    const imageRef = storageRef(
-      storage,
-      `images/${file.name}-${new Date().getTime()}`
-    );
+      const storage = getStorage();
+      const imageRef = storageRef(
+        storage,
+        `images/${file.name}-${new Date().getTime()}`
+      );
 
-    const metadata = {
-      contentType: file.type,
-    };
+      const metadata = {
+        contentType: file.type,
+      };
 
-    const snapshot = await uploadBytesResumable(imageRef, file, metadata);
-    const downloadUrl = await getDownloadURL(snapshot.ref);
+      setThumbnailLoading(true);
+      console.log("?");
 
-    setThumbnailUrl(downloadUrl);
+      const snapshot = await uploadBytesResumable(imageRef, file, metadata);
+      const downloadUrl = await getDownloadURL(snapshot.ref);
+
+      setThumbnailUrl(downloadUrl);
+    } catch (e) {
+    } finally {
+      setThumbnailLoading(false);
+    }
   };
 
   return (
@@ -179,7 +195,11 @@ const AddPlace: React.FC<KakaoMapPosition> = function ({ position }) {
         <p className={styles["add-place__description"]}>
           장소 사진을 추가해주세요. (선택)
         </p>
-        {thumbnailUrl ? (
+        {thumbnailLoading ? (
+          <div className={styles["add-place__preview"]}>
+            <Loading visible={true} />
+          </div>
+        ) : thumbnailUrl ? (
           <img
             src={thumbnailUrl}
             className={styles["add-place__thumbnail"]}

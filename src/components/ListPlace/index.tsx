@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./index.module.scss";
+import Loading from "../Loading";
 
 import { getDatabase, ref, child, get } from "firebase/database";
 
@@ -7,6 +9,7 @@ const ListPlace = function () {
   const [list, setList] = useState<any>([]);
   const [loading, setLoading] = useState<any>(false);
   const [error, setError] = useState<any>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setLoading(true);
@@ -42,13 +45,15 @@ const ListPlace = function () {
   return (
     <div className={styles["list-place"]}>
       {loading ? (
-        <div className={styles["list-place__loading"]}>
-          <span className={styles["list-place__loading-circle"]}></span>
-        </div>
+        <Loading visible={true} />
       ) : (
         <ul className={styles["list-place__lists"]}>
           {list.map((item: any) => (
-            <li key={item.uniqueId} className={styles["list-place__item"]}>
+            <li
+              key={item.uniqueId}
+              className={styles["list-place__item"]}
+              onClick={() => navigate(`/place/${item.uniqueId}`)}
+            >
               <div className={styles["list-place__item-left"]}>
                 {item.placeName}
               </div>
