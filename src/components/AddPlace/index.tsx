@@ -1,26 +1,20 @@
 import React, { useState } from "react";
 import Loading from "../Loading";
-import { ref, push } from "firebase/database";
-import {
-  getStorage,
-  ref as storageRef,
-  uploadBytesResumable,
-  getDownloadURL,
-} from "firebase/storage";
 import { useNavigate } from "react-router-dom";
-import firebaseApp from "../../firebase/index";
-
+import { createPlace } from "../../firebase/place";
+import { getDownloadURLByUpload } from "../../firebase/imageUpload";
+import useInput from "../../hooks/useInput";
 import styles from "./index.module.scss";
 
-interface KakaoMapPosition {
+interface I_ADD_PLACE_PROPS {
   position: {
-    lat: Number;
-    lon: Number;
+    lat: number;
+    lon: number;
   };
 }
 
-const AddPlace: React.FC<KakaoMapPosition> = function ({ position }) {
-  const [placeName, setPlaceName] = useState<any>("");
+const AddPlace: React.FC<I_ADD_PLACE_PROPS> = function ({ position }) {
+  const [name, onChangeName] = useInput("");
   const [payments, setPayments] = useState<any>([]);
   const [days, setDays] = useState<any>([]);
   const [everyDay, setEveryDay] = useState<any>(false);
@@ -31,10 +25,6 @@ const AddPlace: React.FC<KakaoMapPosition> = function ({ position }) {
   const [thumbnailLoading, setThumbnailLoading] = useState<any>(false);
 
   const navigate = useNavigate();
-
-  const onChangePlaceNmae = (e: any) => {
-    setPlaceName(e.target.value);
-  };
 
   // @TODO onChangePayment, onChangeDay 공통화
   const onChangePayment = (type: any) => {
@@ -121,7 +111,7 @@ const AddPlace: React.FC<KakaoMapPosition> = function ({ position }) {
   const onSubmit = async (e: any) => {
     e.preventDefault();
 
-    if (!placeName.length) {
+    if (!name.length) {
       alert("장소 이름을 작성하세요.");
       return;
     }
@@ -148,8 +138,8 @@ const AddPlace: React.FC<KakaoMapPosition> = function ({ position }) {
       }
     }
 
-    await push(ref(firebaseApp.db, "places/"), {
-      placeName,
+    await createPlace({
+      name,
       payments,
       days,
       menuTypes,
@@ -165,21 +155,13 @@ const AddPlace: React.FC<KakaoMapPosition> = function ({ position }) {
     try {
       const file = e.target.files[0];
 
-      const storage = getStorage();
-      const imageRef = storageRef(
-        storage,
-        `images/${file.name}-${new Date().getTime()}`
-      );
-
       const metadata = {
         contentType: file.type,
       };
 
       setThumbnailLoading(true);
-      console.log("?");
 
-      const snapshot = await uploadBytesResumable(imageRef, file, metadata);
-      const downloadUrl = await getDownloadURL(snapshot.ref);
+      const downloadUrl = await getDownloadURLByUpload(file, metadata);
 
       setThumbnailUrl(downloadUrl);
     } catch (e) {
@@ -219,7 +201,7 @@ const AddPlace: React.FC<KakaoMapPosition> = function ({ position }) {
         <input
           type="text"
           className={styles["add-place__input"]}
-          onChange={onChangePlaceNmae}
+          onChange={onChangeName}
         />
       </div>
       <div className={styles["add-place__input-group"]}>

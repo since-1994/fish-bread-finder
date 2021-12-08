@@ -1,42 +1,25 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-  getDatabase,
-  ref,
-  child,
-  get,
-  push,
-  query,
-  equalTo,
-  orderByChild,
-} from "firebase/database";
 import { useParams, useNavigate } from "react-router-dom";
 import Loading from "../../components/Loading";
-import firebaseApp from "../../firebase/index";
 import markerImageSrc from "../../static/images/defaultMarker-3.png";
 import styles from "./index.module.scss";
 import Grade from "../../components/Grade";
+import { getReviewList, createReview } from "../../firebase/review";
+import { getPlaceById } from "../../firebase/place";
+import useInput from "../../hooks/useInput";
 
-const Place: React.FC = function () {
+const PlacePage: React.FC = function () {
   const [place, setPlace] = useState<any>(null);
   const params = useParams();
   const navigate = useNavigate();
   const map = useRef<any>(undefined);
-  const inputRef = useRef<any>(null);
   const [grade, setGrade] = useState(1);
-  const [review, setReview] = useState("");
+  const [review, onChangeReview] = useInput("");
   const [reviewLoading, setReviewLoading] = useState(false);
   const [reviewList, setReviewList] = useState<any>([]);
 
   useEffect(() => {
-    if (inputRef.current) {
-      // inputRef.current.focus();
-    }
-  });
-
-  useEffect(() => {
-    const dbRef = ref(getDatabase());
-
-    get(child(dbRef, `reviews/`))
+    getReviewList()
       .then((snapshot) => {
         if (snapshot.exists()) {
           setReviewList(
@@ -47,7 +30,8 @@ const Place: React.FC = function () {
                   ...Object.assign({}, item[1]),
                 };
               })
-              .filter((review) => review.uniqueId === params.uniqueId).reverse()
+              .filter((review) => review.uniqueId === params.uniqueId)
+              .reverse()
           );
         } else {
         }
@@ -60,9 +44,7 @@ const Place: React.FC = function () {
     const container = document.getElementById("map");
 
     async function init() {
-      const dbRef = ref(getDatabase());
-
-      const snapshot = await get(child(dbRef, `places/${params.uniqueId}`));
+      const snapshot = await getPlaceById(params.uniqueId);
 
       try {
         if (snapshot.exists()) {
@@ -128,16 +110,10 @@ const Place: React.FC = function () {
     setGrade(num);
   };
 
-  const onChangeReview = (e: any) => {
-    setReview(e.target.value);
-  };
-
   const onSumbit = async (e: any) => {
     e.preventDefault();
 
     try {
-      const weeks = ["일", "월", "화", "수", "목", "금", "토"];
-
       if (!review.length) {
         alert("리뷰를 필수 입력하세요.");
         return;
@@ -145,21 +121,14 @@ const Place: React.FC = function () {
 
       setReviewLoading(true);
 
-      const date = new Date();
-
-      await push(ref(firebaseApp.db, "reviews/"), {
+      await createReview({
         review,
         grade,
-        date: `${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()} ${
-          weeks[date.getDay()]
-        }`,
         uniqueId: params.uniqueId,
       });
     } catch (e) {
     } finally {
-      setTimeout(() => {
-        setReviewLoading(false);
-      }, 2000);
+      setReviewLoading(false);
     }
   };
 
@@ -169,7 +138,7 @@ const Place: React.FC = function () {
       {place && (
         <div className={styles["place__wrapper"]}>
           <div className={styles["place__summary"]}>
-            <h1>{place.placeName}</h1>
+            <h1>{place.name}</h1>
             <div className={styles["place__communication"]}>
               <a href="" onClick={(e) => e.preventDefault()}>
                 <i className="fas fa-share-alt-square"></i>공유하기
@@ -253,7 +222,7 @@ const Place: React.FC = function () {
                 <Loading visible={true} />
               ) : (
                 <>
-                  <input type="text" ref={inputRef} onChange={onChangeReview} />
+                  <input type="text" onChange={onChangeReview} />
                   <div className={styles["place__review-controls"]}>
                     <Grade
                       num={grade}
@@ -273,17 +242,19 @@ const Place: React.FC = function () {
                 return (
                   <li key={String(item.uniqueId + index)}>
                     <div className={styles["place__review-grade"]}>
-                      <Grade num={item.grade} onClick={() => {}} fontSize="16px" />
+                      <Grade
+                        num={item.grade}
+                        onClick={() => {}}
+                        fontSize="16px"
+                      />
                     </div>
-                    <p className={styles["place__review-date"]}>
-                      {item.date}
-                    </p>
+                    <p className={styles["place__review-date"]}>{item.date}</p>
                     <p className={styles["place__review-text"]}>
                       {item.review}
                     </p>
                   </li>
-                )
-                })}
+                );
+              })}
             </ul>
           </div>
         </div>
@@ -292,4 +263,4 @@ const Place: React.FC = function () {
   );
 };
 
-export default Place;
+export default PlacePage;

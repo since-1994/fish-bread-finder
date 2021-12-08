@@ -59,7 +59,7 @@ const Add: React.FC = () => {
     willAddedPosition.current = { lat, lon: lng };
 
     setLayerVisible(true);
-    console.log(`한경 ! 이 위치 정보를 가져다 써!-> lat:${lat}, lon:${lng}`);
+    // console.log(`한경 ! 이 위치 정보를 가져다 써!-> lat:${lat}, lon:${lng}`);
 
     setPosition({
       lat,

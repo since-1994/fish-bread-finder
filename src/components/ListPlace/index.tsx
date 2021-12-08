@@ -15,16 +15,18 @@ const ListPlace = function () {
     setLoading(true);
     const dbRef = ref(getDatabase());
 
-    get(child(dbRef, `places/`))
+    get(child(dbRef, `place/`))
       .then((snapshot) => {
         if (snapshot.exists()) {
           setList(
-            Object.entries(snapshot.val()).map((item) => {
-              return {
-                uniqueId: item[0],
-                ...Object.assign({}, item[1]),
-              };
-            }).reverse()
+            Object.entries(snapshot.val())
+              .map((item) => {
+                return {
+                  uniqueId: item[0],
+                  ...Object.assign({}, item[1]),
+                };
+              })
+              .reverse()
           );
         } else {
           setList([]);
@@ -55,7 +57,7 @@ const ListPlace = function () {
               onClick={() => navigate(`/place/${item.uniqueId}`)}
             >
               <div className={styles["list-place__item-left"]}>
-                <p>{item.placeName}</p>
+                <p>{item.name}</p>
                 <ul className={styles["list-place__menuTypes"]}>
                   {item.menuTypes.map((menu: any) => (
                     <li
