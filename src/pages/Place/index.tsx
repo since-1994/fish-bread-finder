@@ -47,7 +47,7 @@ const Place: React.FC = function () {
                   ...Object.assign({}, item[1]),
                 };
               })
-              .filter((review) => review.uniqueId === params.uniqueId)
+              .filter((review) => review.uniqueId === params.uniqueId).reverse()
           );
         } else {
         }
@@ -269,11 +269,21 @@ const Place: React.FC = function () {
             </form>
 
             <ul className={styles["place__review-lists"]}>
-              {reviewList.map((review: any) => (
-                <li>
-                  <Grade num={2} onClick={() => {}} fontSize="16px" />
-                </li>
-              ))}
+              {reviewList.map((item: any, index: any) => {
+                return (
+                  <li key={String(item.uniqueId + index)}>
+                    <div className={styles["place__review-grade"]}>
+                      <Grade num={item.grade} onClick={() => {}} fontSize="16px" />
+                    </div>
+                    <p className={styles["place__review-date"]}>
+                      {item.date}
+                    </p>
+                    <p className={styles["place__review-text"]}>
+                      {item.review}
+                    </p>
+                  </li>
+                )
+                })}
             </ul>
           </div>
         </div>
