@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
 import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import PropTypes from 'prop-types';
 import Layer from '../Layer';
 import markerImageSrc from '../../static/images/defaultMarker-3.png';
@@ -25,6 +26,7 @@ const KakaoMap: React.FC<kakaoMapProps> = function ({ mode }) {
   // const map2 = useRef(undefined);
   const [list , setList] = useState<any[]>([]);
   const [willAddedPosition] = useState<KakaoMapPosition>({lat: 0, lon: 0});
+  const navigate = useNavigate();
 
   async function getCurrentPosition(): Promise<KakaoMapPosition> {
     return new Promise<KakaoMapPosition>((resolve) => {
@@ -65,14 +67,15 @@ const KakaoMap: React.FC<kakaoMapProps> = function ({ mode }) {
               console.log(item);
               return {
                 position: item[1].position,
-                placeName: item[1].placeName
+                placeName: item[1].placeName,
+                uniqueId: item[0],
               }
             })
-  
+            
             setList(stores);
-            stores.forEach(({position, placeName}) => {
+            stores.forEach(({position, placeName, uniqueId}) => {
 
-              console.log(position);
+              console.log(uniqueId);
 
               const imageSrc = markerImageSrc;
               const imageSize = new window.kakao.maps.Size(50, 50);
@@ -85,12 +88,18 @@ const KakaoMap: React.FC<kakaoMapProps> = function ({ mode }) {
               );
               const markerPosition = new window.kakao.maps.LatLng(position.lat, position.lng);
         
-              const marker = new window.kakao.maps.Marker({
+              const marker2 = new window.kakao.maps.Marker({
                 map: map.current,
                 position: markerPosition,
                 image: markerImage,
-                title: placeName
+                title: placeName,
+                clickable: true,
               });     
+
+              window.kakao.maps.event.addListener(marker2, 'click', ()=> {
+                console.log(uniqueId);
+                navigate(`/place/${uniqueId}/`);
+              })
             })
         } else {
           setList([]);
