@@ -24,15 +24,7 @@ const ListPlace = function () {
                 uniqueId: item[0],
                 ...Object.assign({}, item[1]),
               };
-            })
-          );
-          console.log(
-            Object.entries(snapshot.val()).map((item) => {
-              return {
-                uniqueId: item[0],
-                ...Object.assign({}, item[1]),
-              };
-            })
+            }).reverse()
           );
         } else {
           setList([]);
